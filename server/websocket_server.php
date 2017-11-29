@@ -1,4 +1,5 @@
 <?php
+echo "gora";
 set_time_limit(0);
 
 use Ratchet\MessageComponentInterface;
@@ -7,7 +8,7 @@ use Ratchet\Server\IoServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 require_once '../vendor/autoload.php';
-
+echo "po usach";
 class Chat implements MessageComponentInterface {
 	protected $clients;
 	protected $users;
