@@ -9,6 +9,7 @@ use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 require_once '../vendor/autoload.php';
 echo "po usach";
+die;
 class Chat implements MessageComponentInterface {
 	protected $clients;
 	protected $users;
