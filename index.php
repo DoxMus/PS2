@@ -1,80 +1,64 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-	<title>PS2 Project</title>
+	<title>Chat</title>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	    crossorigin="anonymous">
-
-	<link rel="stylesheet" href="css/style.css">
-
+	<meta name="viewport" content="width=device-width">
+	<script src="js/jquery.js" type="text/javascript"></script>
+	<style type="text/css">
+	* {margin:0;padding:0;box-sizing:border-box;font-family:arial,sans-serif;resize:none;}
+	html,body {width:100%;height:100%;}
+	#wrapper {position:relative;margin:auto;max-width:1000px;height:100%;}
+	#chat_output {position:absolute;top:0;left:0;padding:20px;width:100%;height:calc(100% - 100px);}
+	#chat_input {position:absolute;bottom:0;left:0;padding:10px;width:100%;height:100px;border:1px solid #ccc;}
+	</style>
 </head>
-
 <body>
-
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<h1>PS2 Final Project</h1>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="form-group">
-					<select class="form-control" id="db">
-						<option>Users</option>
-						<option>Products</option>
-						<option>User-Products</option>
-					</select>
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<button class="btn btn-primary" id="select_db">Pokaż zawartość tabeli</button>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-6">
-				<div class="form-group">
-					<input type="text" class="form-control" id="query">
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<button class="btn btn-primary" id="select_db">Wyślij zapytanie</button>
-			</div>
-		</div>
-	</div>
-
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
-
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	    crossorigin="anonymous"></script>
-
-
-	<script type="text/javascript">
-		jQuery(function ($) {
+	<div id="wrapper">
+		<div id="chat_output"></div>
+		<textarea id="chat_input" placeholder="Deine Nachricht..."></textarea>
+		<script type="text/javascript">
+		jQuery(function($){
+			var user_id = Math.floor((Math.random() * 999) + 1);
 			// Websocket
-			var websocket_server = new WebSocket("wss://ps2-final-project.azurewebsites.net");
-
-			websocket_server.onopen = function (e) {
+			var websocket_server = new WebSocket("ws://localhost:8080/");
+			websocket_server.onopen = function(e) {
 				websocket_server.send(
 					JSON.stringify({
-
+						'type':'socket',
+						'user_id':user_id
 					})
 				);
 			};
-			websocket_server.onerror = function (e) {}
-
-			websocket_server.onmessage = function (e) {
-				var json = JSON.parse(e.data);
+			websocket_server.onerror = function(e) {
+				// Errorhandling
 			}
+			websocket_server.onmessage = function(e)
+			{
+				var json = JSON.parse(e.data);
+				switch(json.type) {
+					case 'chat':
+						$('#chat_output').append(json.msg);
+						break;
+				}
+			}
+			// Events
+			$('#chat_input').on('keyup',function(e){
+				if(e.keyCode==13 && !e.shiftKey)
+				{
+					var chat_msg = $(this).val();
+					websocket_server.send(
+						JSON.stringify({
+							'type':'chat',
+							'user_id':user_id,
+							'chat_msg':chat_msg
+						})
+					);
+					$(this).val('');
+				}
+			});
 		});
-	</script>
+		</script>
+	</div>
 </body>
-
 </html>
