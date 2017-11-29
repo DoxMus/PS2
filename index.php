@@ -59,7 +59,7 @@
 	<script type="text/javascript">
 		jQuery(function ($) {
 			// Websocket
-			var websocket_server = new WebSocket("ws://localhost:8080/");
+			var websocket_server = new WebSocket("ws://localhost:8089/");
 
 			websocket_server.onopen = function (e) {
 				websocket_server.send(
