@@ -65,9 +65,10 @@ $ws = new WsServer($chat);
 echo 'ws';
 $http = new HttpServer($ws);
 echo 'http';
-die;
 $server = IoServer::factory(
 	$http, 8077);
 	echo "serwer wystartował";
+	die;
+	
 	$server->run();
 ?>
