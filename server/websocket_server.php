@@ -9,7 +9,7 @@ use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 require_once '../vendor/autoload.php';
 echo "po usach";
-die;
+
 class Chat implements MessageComponentInterface {
 	protected $clients;
 	protected $users;
@@ -59,9 +59,15 @@ class Chat implements MessageComponentInterface {
 	}
 }
 echo "echo";
-
+$chat = new Chat();
+echo 'chat';
+$ws = new WsServer($chat);
+echo 'ws';
+$http = new HttpServer($ws);
+echo 'http';
+die;
 $server = IoServer::factory(
-	new HttpServer(new WsServer(new Chat())), 8077);
+	$http, 8077);
 	echo "serwer wystartował";
 	$server->run();
 ?>
