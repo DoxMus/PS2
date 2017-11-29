@@ -18,6 +18,7 @@ class Chat implements MessageComponentInterface {
 
 	public function onOpen(ConnectionInterface $conn) {
 		$this->clients->attach($conn);
+		echo "onOpen";
 		// $this->users[$conn->resourceId] = $conn;
 	}
 
@@ -50,12 +51,13 @@ class Chat implements MessageComponentInterface {
 	}
 
 	public function onError(ConnectionInterface $conn, \Exception $e) {
+		echo $e;
 		$conn->close();
 	}
 }
 $server = IoServer::factory(
-	new HttpServer(new WsServer(new Chat())),
-	8089
-);
+	new HttpServer(new WsServer(new Chat())), 8089);
 $server->run();
+echo "serwer wystartował";
+echo $server;
 ?>
