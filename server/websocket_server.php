@@ -56,7 +56,7 @@ class Chat implements MessageComponentInterface {
 	}
 }
 $server = IoServer::factory(
-	new HttpServer(new WsServer(new Chat())), 8080);
+	new HttpServer(new WsServer(new Chat())));
 	
 	
 	echo "serwer wystartował";

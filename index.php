@@ -21,7 +21,7 @@
 		jQuery(function($){
 			var user_id = Math.floor((Math.random() * 999) + 1);
 			// Websocket
-			var websocket_server = new WebSocket("ws://localhost:8080/");
+			var websocket_server = new WebSocket("wss://ps2-final-project.azurewebsites.net");
 			websocket_server.onopen = function(e) {
 				websocket_server.send(
 					JSON.stringify({
