@@ -68,7 +68,6 @@ echo 'http';
 $server = IoServer::factory(
 	$http, 8077);
 	echo "serwer wystartował";
-	die;
 	
 	$server->run();
 ?>
